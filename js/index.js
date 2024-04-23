@@ -1,38 +1,47 @@
-const form = document.querySelector("form");
-const card_1 = document.querySelector(".container");
-const card = document.querySelector(".card");
-const mydiv = document.getElementById("mydiv");
-const email = document.querySelector("input");
+"use strict";
 
-form.addEventListener("submit", (e) => {
-  e.preventDefault();
+//constants
+const inputField = document.getElementById("email");
+const subscriptionButton = document.querySelector(".btn-1");
+const successMessage = document.querySelector(".success-msg-container");
+const signupForm = document.querySelector(".signup-container");
+const errorMessage = document.querySelector(".span-1");
+const labelElement = document.querySelector("label");
+const dismissButton = document.querySelector(".btn-2");
+const formElement = document.querySelector(".search-component");
+//Email regex expression
+const re =
+  /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 
-  const emailValue = email.value.trim();
-
-  // Regular expression to validate email format
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-  if (emailValue === "" || !emailRegex.test(emailValue)) {
-    // Display error message and change input background color
-    mydiv.textContent = "Valid email required";
-    email.style.background = "rgb(255 232 230)";
-    email.style.color = "var(--Tomato)";
-    email.style.borderColor = "var(--Tomato)";
+//Email validation function.
+const validateEmail = () => {
+  if (!inputField.value.match(re)) {
+    inputField.style.border = "hsl(4, 100%, 67%) 1px solid";
+    errorMessage.classList.remove("hidden");
+    inputField.style.color = "hsl(4, 100%, 67%)";
+  } else if (inputField.value === "") {
+    inputField.style.border = "hsl(4, 100%, 67%) 1px solid";
+    errorMessage.classList.remove("hidden");
   } else {
-    // Clear error message and reset input background color
-    mydiv.textContent = "";
-    email.style.borderColor = "initial"; // Reset border color
-    email.style.color = "initial"; // Reset text color
-    email.style.background = "initial"; // Reset background color
-    card_1.classList.add("hide");
-    card.classList.remove("hide");
+    inputField.style.border = "hsl(116, 46%, 49%) 1px solid";
+    errorMessage.classList.add("hidden");
+    successMessage.classList.remove("hidden");
+    signupForm.classList.add("hidden");
   }
+};
+
+//eventListener for subscription submit button
+subscriptionButton.addEventListener("click", (e) => {
+  e.preventDefault();
+  validateEmail();
 });
 
-// Add an event listener to reset styles when the email input changes
-email.addEventListener("input", () => {
-  mydiv.textContent = ""; // Clear error message
-  email.style.borderColor = "initial"; // Reset border color
-  email.style.color = "initial"; // Reset text color
-  email.style.background = "initial"; // Reset background color
+//event listener for dismiss button
+dismissButton.addEventListener("click", (e) => {
+  e.preventDefault();
+  successMessage.classList.add("hidden");
+  signupForm.classList.remove("hidden");
+  inputField.style.border = "hsl(231, 7%, 60%) 1px solid";
+  inputField.style.color = "hsl(231, 7%, 60%)";
+  formElement.reset();
 });
